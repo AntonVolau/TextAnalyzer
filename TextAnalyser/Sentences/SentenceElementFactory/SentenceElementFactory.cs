@@ -5,6 +5,9 @@ using TextAnalyser.SentenceElements.Implementation;
 
 namespace TextAnalyser.Sentences.SentenceElementFactory
 {
+    /// <summary>
+    /// This static class separates elements by separator and word types
+    /// </summary>
     public class SentenceElementFactory
     {
         private readonly IDictionary<string, ISentenceElement> _sentenceElements =

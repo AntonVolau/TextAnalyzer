@@ -77,6 +77,11 @@ namespace TextAnalyser.TextParser.Implementation
             return new Text.Implementation.Text(sentences); // return method result
         }
 
+        /// <summary>
+        /// Some hard method that I am not entirely understand
+        /// </summary>
+        /// <param name="inputLine"></param>
+        /// <returns></returns>
         public static ICollection<ISentenceElement> StringParse(string inputLine)
         {
             var line = string.Concat(inputLine, " ");
