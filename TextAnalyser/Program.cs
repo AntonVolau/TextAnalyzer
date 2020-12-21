@@ -10,7 +10,8 @@ namespace TextAnalyser
     {
         private static void Main()
         {
-            var text = TextParser.Implementation.TextParser.Parse(Path.Combine(Environment.CurrentDirectory, "TextFiles/TestSentence.txt"));
+            string fullPath = Path.Combine(Environment.CurrentDirectory, "TextFiles/TestSentence.txt");
+            var text = TextParser.Implementation.TextParser.Parse(fullPath);
 
             Console.WriteLine("_______________________ Initial Text _______________________");
             Console.WriteLine(text);
