@@ -1,0 +1,48 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="D:\Прогание\Task2 TextAnalyser\TextAnalyser\.editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="D:\Прогание\Task2 TextAnalyser\TextAnalyser\.editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="D:\Прогание\Task2 TextAnalyser\TextAnalyser\.editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="D:\Прогание\Task2 TextAnalyser\TextAnalyser\.editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="D:\Прогание\Task2 TextAnalyser\TextAnalyser\.editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="D:\Прогание\Task2 TextAnalyser\TextAnalyser\.editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="D:\Прогание\Task2 TextAnalyser\TextAnalyser\.editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="D:\Прогание\Task2 TextAnalyser\TextAnalyser\.editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="D:\Прогание\Task2 TextAnalyser\TextAnalyser\.editorconfig" />
+  </ItemGroup>
+
+</Project>
