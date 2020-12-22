@@ -43,7 +43,7 @@ namespace TextAnalyser.Sentences.Implementation
         }
 
         /// <summary>
-        /// Method to get type of sertain sentence
+        /// Method to get type of certain sentence
         /// </summary>
         public void GetSentenceTypes()
         {

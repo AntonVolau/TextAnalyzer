@@ -10,7 +10,7 @@ namespace TextAnalyser
     {
         private static void Main()
         {
-            string fullPath = Path.Combine(Environment.CurrentDirectory, "TextFiles/TestSentence.txt");
+            string fullPath = Path.Combine(Environment.CurrentDirectory, "TextFiles/Sentence.txt");
             var text = TextParser.Implementation.TextParser.Parse(fullPath);
 
             Console.WriteLine("_______________________ Initial Text _______________________");
@@ -26,8 +26,8 @@ namespace TextAnalyser
             }
 
             Console.WriteLine("_______________________ Task2 _______________________");
-            Console.WriteLine("Task 2: In every interrogative sentence print all words with sertain number of characters");
-            Console.WriteLine("Please, enter length of words for second task");
+            Console.WriteLine("Task 2: In every interrogative sentence print all words with certain number of characters");
+            Console.Write("Please, enter length of words for second task:");
             int secondTaskWordLength;
             startTask2:
             try
@@ -47,8 +47,8 @@ namespace TextAnalyser
             }
 
             Console.WriteLine("_______________________ Task3 _______________________");
-            Console.WriteLine("Task 3: Delete all words of sertain length starting with consonant from text");
-            Console.WriteLine("Please, enter length of words for third task");
+            Console.WriteLine("Task 3: Delete all words of certain length starting with consonant from text");
+            Console.Write("Please, enter length of words for third task:");
             int thirdTaskWordLength;
             startTask3:
             try
@@ -69,7 +69,7 @@ namespace TextAnalyser
 
             Console.WriteLine("_______________________ Task4 _______________________");
             Console.WriteLine("Task 4: In certain sentence replace all words of given length with substring");
-            Console.WriteLine("Please, enter number of sentece");
+            Console.Write("Please, enter number of sentece:");
             int fourthTaskWordLength;
             string substringForReplacement;
             int fourthTaskSentenceNumber;

@@ -8,20 +8,19 @@ using TextAnalyser.SentenceElements;
 using TextAnalyser.SentenceElements.Implementation;
 using TextAnalyser.Sentences.Implementation;
 using TextAnalyser.Sentences.SentenceElementFactory;
-using TextAnalyser.TextFomatting.Implementation;
 
 namespace TextAnalyser.TextParser.Implementation
 {
     static class TextParser
     {
         /// <summary>
-        /// Parsing strings in our input text and return Text model(List if sentences with sertain parameters) 
+        /// Parsing strings in our input text and return Text model(List if sentences with certain parameters) 
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
         public static Text.Implementation.Text Parse(string input)
         {
-            StreamReader streamReader = null; // Creating streamreader object and assign a sertain value
+            StreamReader streamReader = null; // Creating streamreader object and assign a certain value
             var sentences = new List<Sentence>(); // Initializing list of sentences
             string fileLine; // Creating string that will contain lines from our input TXT file
             string tempLine = null; // Temporary line to store unfinished sentences from the end of line to pass it to the next line
