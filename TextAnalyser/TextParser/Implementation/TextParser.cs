@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -24,6 +25,7 @@ namespace TextAnalyser.TextParser.Implementation
             var sentences = new List<Sentence>(); // Initializing list of sentences
             string fileLine; // Creating string that will contain lines from our input TXT file
             string tempLine = null; // Temporary line to store unfinished sentences from the end of line to pass it to the next line
+            string textSplitPattern = ConfigurationManager.AppSettings["textSplitter"]; // Declaring regular expression pattern for splitting sentences in text
 
             try
             {
@@ -33,7 +35,7 @@ namespace TextAnalyser.TextParser.Implementation
                     fileLine = string.Concat(tempLine, fileLine);
                     tempLine = null;
                     fileLine = Regex.Replace(fileLine, @"\s+", " ");
-                    var sent = Regex.Split(fileLine, @"(?<=[\.!?])").Select(x => string.Concat(x, " "));
+                    var sent = Regex.Split(fileLine, textSplitPattern).Select(x => string.Concat(x, " "));
                     foreach (string senten in sent)
                     {
                         var newSent = Regex.Replace(senten, @"\s+", " ");
@@ -77,17 +79,17 @@ namespace TextAnalyser.TextParser.Implementation
         }
 
         /// <summary>
-        /// Some hard method that I am not entirely understand
+        /// Method to parse string and separate it's elements by words and separators
         /// </summary>
         /// <param name="inputLine"></param>
         /// <returns></returns>
         public static ICollection<ISentenceElement> StringParse(string inputLine)
         {
             var line = string.Concat(inputLine, " ");
-
+            string sentenceSplitPattern = ConfigurationManager.AppSettings["sentenceSplitter"];
             var sentenceElements = new Collection<ISentenceElement>();
             var sentenceElementFactory = new SentenceElementFactory();
-            foreach (Match match in Regex.Matches(line, @"\b(\w+)((\p{P}{0,3})\s?)"))
+            foreach (Match match in Regex.Matches(line, sentenceSplitPattern))
             {
                 sentenceElements.Add(sentenceElementFactory.GetSentenceElement(match.Groups[1].ToString()));
 

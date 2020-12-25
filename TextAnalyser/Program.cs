@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.IO;
 using TextAnalyser.Enums;
 using TextAnalyser.SentenceElements.Implementation;
@@ -10,15 +11,15 @@ namespace TextAnalyser
     {
         private static void Main()
         {
-            string fullPath = Path.Combine(Environment.CurrentDirectory, "TextFiles/Sentence.txt");
-            var text = TextParser.Implementation.TextParser.Parse(fullPath);
-
+            string filePath = ConfigurationManager.AppSettings["fileReadPath"]; // Getting path to text file by using app configuration.
+            string fullPath = Path.Combine(Environment.CurrentDirectory, filePath); // Getting full path to file.
+            var text = TextParser.Implementation.TextParser.Parse(fullPath); // Converting our txt file in list of sentences
             Console.WriteLine("_______________________ Initial Text _______________________");
             Console.WriteLine(text);
             Console.WriteLine("_______________________ Task1 _______________________");
             Console.WriteLine("Task 1: Print all sentences ordered by count of words ascending");
 
-            var sortedText = TextFormat.SortSentencesAscending<Word>(text);
+            var sortedText = TextFormat.SortSentencesByWordsCountAscending<Word>(text);
 
             foreach (var sentence in sortedText)
             {
@@ -39,7 +40,7 @@ namespace TextAnalyser
                 Console.WriteLine("Invalid input, try again");
                 goto startTask2;
             }
-            var secondTaskWords = TextFormat.GetWordsFromSentences(text, SentenceType.Interrogative, secondTaskWordLength);
+            var secondTaskWords = TextFormat.GetWordsFromSentencesofCertainType(text, SentenceType.Interrogative, secondTaskWordLength);
 
             foreach (var word in secondTaskWords)
             {
@@ -79,7 +80,7 @@ namespace TextAnalyser
                 fourthTaskSentenceNumber = Int32.Parse(Console.ReadLine());
                 Console.WriteLine("Please, enter length of words for fourth task");
                 fourthTaskWordLength = Int32.Parse(Console.ReadLine());
-                Console.WriteLine("Please, enter length of words for fourth task");
+                Console.WriteLine("Please, enter new substring");
                 substringForReplacement = Console.ReadLine();
             }
             catch
@@ -88,8 +89,7 @@ namespace TextAnalyser
                 goto startTask4;
             }
 
-            text = TextFormat.ReplacesWordsInSentenceWithSubstring(text, fourthTaskSentenceNumber,
-                fourthTaskWordLength, TextParser.Implementation.TextParser.StringParse(substringForReplacement));
+            text = TextFormat.ReplacesWordsInSentenceWithSubstring(text, fourthTaskSentenceNumber, fourthTaskWordLength, TextParser.Implementation.TextParser.StringParse(substringForReplacement));
 
             foreach (var sentence in text.Sentences)
             {

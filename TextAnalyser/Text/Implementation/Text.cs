@@ -21,10 +21,6 @@ namespace TextAnalyser.Text.Implementation
                 _sentences = value;
             }
         }
-        public Text()
-        {
-            Sentences = new List<Sentence>();
-        }
         public Text(List<Sentence> sentences)
         {
             Sentences = sentences;

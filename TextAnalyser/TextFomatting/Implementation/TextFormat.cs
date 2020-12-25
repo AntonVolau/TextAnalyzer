@@ -12,6 +12,13 @@ namespace TextAnalyser.TextFomatting.Implementation
 {
     public static class TextFormat
     {
+        /// <summary>
+        /// Method to select sentence elements that satisfy certain condition
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="sentence"></param>
+        /// <param name="selector"></param>
+        /// <returns></returns>
         public static ICollection<T> SelectElements<T>(ISentence sentence, Func<T, bool> selector = null)
             where T : SentenceElement
         {
@@ -19,21 +26,38 @@ namespace TextAnalyser.TextFomatting.Implementation
                 ? sentence.SentenceElements.OfType<T>().ToList()
                 : sentence.SentenceElements.OfType<T>().Where(selector).ToList();
         }
+        /// <summary>
+        /// Method to select sentences that satisfy certain condition
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="selector"></param>
+        /// <returns></returns>
         public static ICollection<Sentence> SelectSentences(IText text, Func<Sentence, bool> selector = null)
         {
             return selector == null ? text.Sentences : text.Sentences.Where(selector).ToList();
         }
-        public static IOrderedEnumerable<ISentence> SortSentencesAscending<T>(IText text) where T : SentenceElement
+        /// <summary>
+        /// Method to sort sentences in text by number of words ascending
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="text"></param>
+        /// <returns></returns>
+        public static IOrderedEnumerable<ISentence> SortSentencesByWordsCountAscending<T>(IText text) where T : Word
         {
             return text.Sentences.OrderBy(x => SelectElements<T>(x).Count);
         }
 
-        public static IEnumerable<Word> GetWordsFromSentences(IText text, SentenceType sentenceType, int wordLength)
+        public static IEnumerable<Word> GetWordsFromSentencesofCertainType(IText text, SentenceType sentenceType, int wordLength)
         {
             return SelectSentences(text, x => x.SentenceTypes.Contains(sentenceType))
                 .SelectMany(y => SelectElements<Word>(y, z => z.Length == wordLength)).Distinct();
         }
-
+        /// <summary>
+        /// Method to delete words starting with consonant from sentence
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="wordLength"></param>
+        /// <returns></returns>
         public static Text.Implementation.Text DeleteWordsStartingWithConsonant(Text.Implementation.Text text, int wordLength)
         {
             var newSentences = text.Sentences
@@ -42,7 +66,12 @@ namespace TextAnalyser.TextFomatting.Implementation
 
             return new Text.Implementation.Text(newSentences);
         }
-
+        /// <summary>
+        /// Method to remove some words from sentence
+        /// </summary>
+        /// <param name="sentence"></param>
+        /// <param name="predicate"></param>
+        /// <returns></returns>
         public static Sentence RemoveWordsFromSentence(ISentence sentence, Predicate<Word> predicate)
         {
             var newSentenceElements = sentence.SentenceElements.ToList();
@@ -63,14 +92,25 @@ namespace TextAnalyser.TextFomatting.Implementation
 
             return new Sentence(newSentenceElements);
         }
-
+        /// <summary>
+        /// Method to get a list of sentence elements of certain type 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="sentenceElements"></param>
+        /// <param name="predicate"></param>
+        /// <returns></returns>
         public static IList<T> GetMatchingElements<T>(IList<ISentenceElement> sentenceElements, Predicate<T> predicate)
         {
             return sentenceElements.OfType<T>().ToList().FindAll(predicate);
         }
-
-        public static ICollection<ISentenceElement> ReplaceWord(ISentence sentence, Predicate<IWord> predicate,
-            ICollection<ISentenceElement> sentenceElements)
+        /// <summary>
+        /// Method to replace some words with other words of different length
+        /// </summary>
+        /// <param name="sentence"></param>
+        /// <param name="predicate"></param>
+        /// <param name="sentenceElements"></param>
+        /// <returns></returns>
+        public static ICollection<ISentenceElement> ReplaceWord(ISentence sentence, Predicate<IWord> predicate, ICollection<ISentenceElement> sentenceElements)
         {
             var newSentenceElements = sentence.SentenceElements.ToList();
             var matchingWords = GetMatchingElements(newSentenceElements, predicate);
@@ -91,8 +131,7 @@ namespace TextAnalyser.TextFomatting.Implementation
             return newSentenceElements.Count != 0 ? new List<ISentenceElement>(newSentenceElements) : null;
         }
 
-        public static List<Sentence> AddSentencesToTextByIndex(IText text, int sentenceIndex,
-           ICollection<Sentence> sentences)
+        public static List<Sentence> AddSentencesToTextByIndex(IText text, int sentenceIndex, ICollection<Sentence> sentences)
         {
             var newTextSentences = text.Sentences.ToList();
 
@@ -100,9 +139,15 @@ namespace TextAnalyser.TextFomatting.Implementation
 
             return new List<Sentence>(newTextSentences);
         }
-
-        public static Text.Implementation.Text ReplacesWordsInSentenceWithSubstring(IText text, int sentenceNumber, int wordLength,
-            ICollection<ISentenceElement> sentenceElements)
+        /// <summary>
+        /// Method to replace words of certain length in choosen centence by substring of any length
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="sentenceNumber"></param>
+        /// <param name="wordLength"></param>
+        /// <param name="sentenceElements"></param>
+        /// <returns></returns>
+        public static Text.Implementation.Text ReplacesWordsInSentenceWithSubstring(IText text, int sentenceNumber, int wordLength, ICollection<ISentenceElement> sentenceElements)
         {
             var sentenceIndex = sentenceNumber - 1;
 
