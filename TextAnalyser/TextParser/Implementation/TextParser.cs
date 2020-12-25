@@ -35,22 +35,22 @@ namespace TextAnalyser.TextParser.Implementation
                     fileLine = string.Concat(tempLine, fileLine);
                     tempLine = null;
                     fileLine = Regex.Replace(fileLine, @"\s+", " ");
-                    var sent = Regex.Split(fileLine, textSplitPattern).Select(x => string.Concat(x, " "));
-                    foreach (string senten in sent)
+                    var splitedSentences = Regex.Split(fileLine, textSplitPattern).Select(x => string.Concat(x, " "));
+                    foreach (string sentence in splitedSentences)
                     {
-                        var newSent = Regex.Replace(senten, @"\s+", " ");
-                        if (!newSent.Any(Char.IsLetter))
+                        var newSentence = Regex.Replace(sentence, @"\s+", " ");
+                        if (!newSentence.Any(Char.IsLetter))
                         {
                             continue;
                         }
-                        else if (Separators.SentenceSeparators.Any(x => newSent.EndsWith(x)))
+                        else if (Separators.SentenceSeparators.Any(x => newSentence.EndsWith(x)))
                         {
-                            var elementsForNewSentence = StringParse(newSent);
+                            var elementsForNewSentence = StringParse(newSentence);
                             sentences.Add(new Sentence(elementsForNewSentence));
                         }
-                        else if (Separators.WordSeparators.Any(x => newSent.EndsWith(x)))
+                        else if (Separators.WordSeparators.Any(x => newSentence.EndsWith(x)))
                         {
-                            tempLine = newSent;
+                            tempLine = newSentence;
                         }
                     }
                 }
