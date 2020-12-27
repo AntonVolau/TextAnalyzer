@@ -61,7 +61,7 @@ namespace TextAnalyser.TextFomatting.Implementation
         public static Text.Implementation.Text DeleteWordsStartingWithConsonant(Text.Implementation.Text text, int wordLength)
         {
             var newSentences = text.Sentences
-                .Select(x => RemoveWordsFromSentence(x, y => y.Length == wordLength && y!.StartsWithVovel()))
+                .Select(x => RemoveWordsFromSentence(x, y => y.Length == wordLength && !y.StartsWithVovel()))
                 .Where(x => x.SentenceElements.OfType<IWord>().Any() && x.SentenceElements.Count > 0).ToList();
 
             return new Text.Implementation.Text(newSentences);
@@ -105,6 +105,7 @@ namespace TextAnalyser.TextFomatting.Implementation
         }
         /// <summary>
         /// Method to replace some words with other words of different length
+        /// Predicate checks if word have correct length
         /// </summary>
         /// <param name="sentence"></param>
         /// <param name="predicate"></param>
@@ -127,7 +128,6 @@ namespace TextAnalyser.TextFomatting.Implementation
                     newSentenceElements.InsertRange(index, sentenceElements);
                 }
             }
-
             return newSentenceElements.Count != 0 ? new List<ISentenceElement>(newSentenceElements) : null;
         }
 
@@ -153,19 +153,17 @@ namespace TextAnalyser.TextFomatting.Implementation
 
             var sentencesForNewText = new List<Sentence>();
             var elementsForNewSentences = new List<ISentenceElement>();
-            var elementsForOneNewSentence = new List<ISentenceElement>();
 
-            elementsForNewSentences.AddRange(ReplaceWord(text.Sentences[sentenceIndex],
-                x => x.Length == wordLength, sentenceElements));
+            elementsForNewSentences.AddRange(ReplaceWord(text.Sentences[sentenceIndex], x => x.Length == wordLength, sentenceElements));
 
             var newSentence = new Sentence(elementsForNewSentences);
 
-            for (int i = 0; i < sentenceIndex; i++)
+            for (int i = 0; i < sentenceIndex; i++) // Adding sentences before changed sentence
             {
                 sentencesForNewText.Add(text.Sentences[i]);
             }
-            sentencesForNewText.Add(newSentence);
-            for (int i = sentenceIndex + 1; i < text.Sentences.Count; i++)
+            sentencesForNewText.Add(newSentence); // Adding changed sentence 
+            for (int i = sentenceIndex + 1; i < text.Sentences.Count; i++) // Adding sentences after changed sentence
             {
                 sentencesForNewText.Add(text.Sentences[i]);
             }
