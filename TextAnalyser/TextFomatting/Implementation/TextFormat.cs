@@ -19,8 +19,7 @@ namespace TextAnalyser.TextFomatting.Implementation
         /// <param name="sentence"></param>
         /// <param name="selector"></param>
         /// <returns></returns>
-        public static ICollection<T> SelectElements<T>(ISentence sentence, Func<T, bool> selector = null)
-            where T : SentenceElement
+        public static ICollection<T> SelectElements<T>(ISentence sentence, Func<T, bool> selector = null) where T : SentenceElement
         {
             return selector == null
                 ? sentence.SentenceElements.OfType<T>().ToList()
@@ -46,7 +45,13 @@ namespace TextAnalyser.TextFomatting.Implementation
         {
             return text.Sentences.OrderBy(x => SelectElements<T>(x).Count);
         }
-
+        /// <summary>
+        /// Method to get list of word-type sentence elements from a sentence of certain type
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="sentenceType"></param>
+        /// <param name="wordLength"></param>
+        /// <returns></returns>
         public static IEnumerable<Word> GetWordsFromSentencesofCertainType(IText text, SentenceType sentenceType, int wordLength)
         {
             return SelectSentences(text, x => x.SentenceTypes.Contains(sentenceType))
@@ -62,7 +67,7 @@ namespace TextAnalyser.TextFomatting.Implementation
         {
             var newSentences = text.Sentences
                 .Select(x => RemoveWordsFromSentence(x, y => y.Length == wordLength && !y.StartsWithVovel()))
-                .Where(x => x.SentenceElements.OfType<IWord>().Any() && x.SentenceElements.Count > 0).ToList();
+                .Where(x => x.SentenceElements.OfType<IWord>().Any() && x.SentenceElements.Count > 0).ToList(); // Removing words from sentence if they satisfy certain conditions
 
             return new Text.Implementation.Text(newSentences);
         }
@@ -80,13 +85,19 @@ namespace TextAnalyser.TextFomatting.Implementation
             {
                 foreach (var element in matchingWords)
                 {
-                    var index = newSentenceElements.IndexOf(element);
+                    var index = newSentenceElements.IndexOf(element); // getting index of sentence element
 
-                    if (index == newSentenceElements.Count - 2 && index > 0) index--;
+                    if (index == newSentenceElements.Count - 2 && index > 0) // reduce index number in case our sentence element is last in sentence (to avoid index out of range exception)
+                    {
+                        index--;
+                    }
 
-                    newSentenceElements.Remove(element);
+                    newSentenceElements.Remove(element); // remove matching sentence element from sentence
 
-                    if (newSentenceElements.Count > 1) newSentenceElements.RemoveAt(index);
+                    if (newSentenceElements.Count > 1) // if sentnce count more than one element, remove separator after deleted word
+                    {
+                        newSentenceElements.RemoveAt(index);
+                    }
                 }
             }
 
@@ -121,24 +132,16 @@ namespace TextAnalyser.TextFomatting.Implementation
                 {
                     var index = newSentenceElements.IndexOf((ISentenceElement)element);
 
-                    newSentenceElements.Remove((ISentenceElement)element);
+                    newSentenceElements.Remove((ISentenceElement)element); // Remove certain element from sentence
 
-                    newSentenceElements.RemoveAt(index);
+                    newSentenceElements.RemoveAt(index); // Remove separator that was left after removing word
 
-                    newSentenceElements.InsertRange(index, sentenceElements);
+                    newSentenceElements.InsertRange(index, sentenceElements); // Add new sentence element in position of removed element
                 }
             }
-            return newSentenceElements.Count != 0 ? new List<ISentenceElement>(newSentenceElements) : null;
+            return newSentenceElements.Count != 0 ? new List<ISentenceElement>(newSentenceElements) : null; // return new list of sentence elements if it is not empty
         }
 
-        public static List<Sentence> AddSentencesToTextByIndex(IText text, int sentenceIndex, ICollection<Sentence> sentences)
-        {
-            var newTextSentences = text.Sentences.ToList();
-
-            newTextSentences.InsertRange(sentenceIndex, sentences);
-
-            return new List<Sentence>(newTextSentences);
-        }
         /// <summary>
         /// Method to replace words of certain length in choosen centence by substring of any length
         /// </summary>
@@ -154,21 +157,21 @@ namespace TextAnalyser.TextFomatting.Implementation
             var sentencesForNewText = new List<Sentence>();
             var elementsForNewSentences = new List<ISentenceElement>();
 
-            elementsForNewSentences.AddRange(ReplaceWord(text.Sentences[sentenceIndex], x => x.Length == wordLength, sentenceElements));
+            elementsForNewSentences.AddRange(ReplaceWord(text.Sentences[sentenceIndex], x => x.Length == wordLength, sentenceElements)); // adding new sentence elements to a list
 
             var newSentence = new Sentence(elementsForNewSentences);
 
-            for (int i = 0; i < sentenceIndex; i++) // Adding sentences before changed sentence
+            for (int i = 0; i < sentenceIndex; i++) // Adding sentences before changed sentence to text
             {
                 sentencesForNewText.Add(text.Sentences[i]);
             }
-            sentencesForNewText.Add(newSentence); // Adding changed sentence 
-            for (int i = sentenceIndex + 1; i < text.Sentences.Count; i++) // Adding sentences after changed sentence
+            sentencesForNewText.Add(newSentence); // Adding changed sentence to text
+            for (int i = sentenceIndex + 1; i < text.Sentences.Count; i++) // Adding sentences after changed sentence to text
             {
                 sentencesForNewText.Add(text.Sentences[i]);
             }
 
-            var newText = new Text.Implementation.Text(sentencesForNewText);
+            var newText = new Text.Implementation.Text(sentencesForNewText); // initializing new text from new sentences
 
             return newText;
         }

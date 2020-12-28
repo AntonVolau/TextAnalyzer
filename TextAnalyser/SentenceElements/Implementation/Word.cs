@@ -20,7 +20,7 @@ namespace TextAnalyser.SentenceElements.Implementation
             return vowels.Any(vowel => vowel == Chars.ToLower().First());
         }
         /// <summary>
-        /// Overriding method ToStrong so our Word class will represent needed values
+        /// Overriding method ToString so our Word class will represent needed values
         /// </summary>
         /// <returns></returns>
         public override string ToString()

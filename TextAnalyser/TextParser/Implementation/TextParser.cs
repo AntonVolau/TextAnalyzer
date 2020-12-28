@@ -32,23 +32,23 @@ namespace TextAnalyser.TextParser.Implementation
                 streamReader = new StreamReader(input);
                 while ((fileLine = streamReader.ReadLine()) != null)
                 {
-                    fileLine = string.Concat(tempLine, fileLine);
+                    fileLine = string.Concat(tempLine, fileLine); // concatenating new line with previous sentence part in case previous line wasn't ended by sentence separator
                     tempLine = null;
-                    fileLine = Regex.Replace(fileLine, @"\s+", " ");
-                    var splitedSentences = Regex.Split(fileLine, textSplitPattern).Select(x => string.Concat(x, " "));
+                    fileLine = Regex.Replace(fileLine, @"\s+", " "); // replasing all extended white spaces with single white space
+                    var splitedSentences = Regex.Split(fileLine, textSplitPattern).Select(x => string.Concat(x, " ")); // splitting line by sentences using pattern
                     foreach (string sentence in splitedSentences)
                     {
                         var newSentence = Regex.Replace(sentence, @"\s+", " ");
-                        if (!newSentence.Any(Char.IsLetter))
+                        if (!newSentence.Any(Char.IsLetter)) // if sentence doesn't contain any letters, we don't include it in text
                         {
                             continue;
                         }
-                        else if (Separators.SentenceSeparators.Any(x => newSentence.EndsWith(x)))
+                        else if (Separators.SentenceSeparators.Any(x => newSentence.EndsWith(x))) // if sentence ends with sentence separator we declare it as new sentence
                         {
                             var elementsForNewSentence = StringParse(newSentence);
                             sentences.Add(new Sentence(elementsForNewSentence));
                         }
-                        else if (Separators.WordSeparators.Any(x => newSentence.EndsWith(x)))
+                        else if (Separators.WordSeparators.Any(x => newSentence.EndsWith(x))) // if line ends with incomplete sentence, we save it to concatinate with next line later
                         {
                             tempLine = newSentence;
                         }
@@ -79,7 +79,7 @@ namespace TextAnalyser.TextParser.Implementation
         }
 
         /// <summary>
-        /// Method to parse string and separate it's elements by words and separators
+        /// Method to parse string and assign a type of elements (words or separators)
         /// </summary>
         /// <param name="inputLine"></param>
         /// <returns></returns>
@@ -89,12 +89,12 @@ namespace TextAnalyser.TextParser.Implementation
             string sentenceSplitPattern = ConfigurationManager.AppSettings["sentenceSplitter"];
             var sentenceElements = new Collection<ISentenceElement>();
             var sentenceElementFactory = new SentenceElementFactory();
-            foreach (Match match in Regex.Matches(line, sentenceSplitPattern))
+            foreach (Match match in Regex.Matches(line, sentenceSplitPattern)) // Splitting our input line by certain pattern and then getting a type of each individual element
             {
-                sentenceElements.Add(sentenceElementFactory.GetSentenceElement(match.Groups[1].ToString()));
+                sentenceElements.Add(sentenceElementFactory.GetSentenceElement(match.Groups[1].ToString())); // assign a type of sentence element
 
-                sentenceElements.Add(sentenceElementFactory.GetSentenceElement(match.Groups[2].ToString()));
-            }
+                sentenceElements.Add(sentenceElementFactory.GetSentenceElement(match.Groups[2].ToString())); // assign the type of space value after our sentence element
+            } // Groups are captured subgroups due to split pattern (done with using of parentheses in pattern)
             return sentenceElements;
         }
     }

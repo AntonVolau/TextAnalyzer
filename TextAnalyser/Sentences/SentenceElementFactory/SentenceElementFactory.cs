@@ -18,15 +18,15 @@ namespace TextAnalyser.Sentences.SentenceElementFactory
             ISentenceElement sentenceElement;
             if (_sentenceElements.ContainsKey(key))
             {
-                sentenceElement = _sentenceElements[key];
+                sentenceElement = _sentenceElements[key]; // if our sentence already contains such element, we don't need to reassign it's type
             }
             else
             {
-                if (Separators.AllSentenceSeparators.Contains(key))
+                if (Separators.AllSentenceSeparators.Contains(key)) // if our sentence element is sentence separator, we assign it type as separator
                 {
                     sentenceElement = new Separator(key);
                 }
-                else
+                else // else we assign it type as word
                 {
                     sentenceElement = new Word(key);
                 }
